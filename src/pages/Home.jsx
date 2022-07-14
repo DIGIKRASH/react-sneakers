@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React from 'react'
 
 import { Sneaker, SneakerLoading } from '../components'
@@ -5,6 +6,21 @@ import { Sneaker, SneakerLoading } from '../components'
 
 function Home() {
   const [items, setItems] = React.useState([])
+  const [cartItems, setCartItems] = React.useState([])
+
+  React.useEffect(() => {
+    fetch('https://62d0089fd9bf9f170581f8bf.mockapi.io/items')
+      .then((res) => {
+        return res.json()
+      })
+      .then((json) => {
+        setItems(json)
+      })
+  }, [])
+
+  const onAddToCart = (obj) => {
+    setCartItems([...cartItems, obj])
+  }
 
 
   return (
@@ -18,16 +34,17 @@ function Home() {
         </div>
       </div>
 
-      <div className="d-flex">
+      <div className="d-flex flex-wrap">
 
 
         {
-          arr.map((obj) => (
+          items.map((obj, index) => (
             <Sneaker
-              key={obj.index}
-              img='./img/sneakers/1.jpg'
+              key={index}
+              img={obj.img}
               title={obj.title}
               price={obj.price}
+              onPlus={(obj) => onAddToCart(obj)}
             />
           ))
         }
@@ -37,7 +54,7 @@ function Home() {
         /> */}
 
       </div>
-    </div >
+    </div>
   )
 }
 

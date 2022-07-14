@@ -1,50 +1,46 @@
 import React from 'react'
 
-function CartMini({ onClose }) {
+import { CartItem } from '../components'
+
+
+
+function CartMini({ onClose, items, onRemoveItem }) {
+
+
   return (
     <div className="overlay">
       <div className="drawer">
         <h2 className="d-flex justify-between mb-30">
           Корзина
-          <img onClick = {onClose} className="cu-p" src="/img/btn-remove.svg" alt="Remove" />
+          <img onClick={onClose} className="cu-p" src="/img/btn-remove.svg" alt="Remove" />
         </h2>
 
         <div className="items">
-          <div className="cartItem d-flex align-center mb-20">
-            <div
-              style={{ backgroundImage: 'url(/img/sneakers/1.jpg)' }}
-              className="cartItemImg"></div>
 
-            <div className="mr-20 flex">
-              <p className="mb-5">Мужские Кроссовки Nike Air Max 270</p>
-              <b>12 999 руб.</b>
-            </div>
-            <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove" />
-          </div>
+          {
+            items &&
+            items.map((obj, index) => (
+              <div key={`${obj.title}_${index}`} className="cartItem d-flex align-center mb-20" >
+                <div
+                  style={{ backgroundImage: `url(${obj.img})` }}
+                  className="cartItemImg"></div>
 
-          <div className="cartItem d-flex align-center mb-20">
-            <div
-              style={{ backgroundImage: 'url(/img/sneakers/1.jpg)' }}
-              className="cartItemImg"></div>
+                <div className="mr-20 flex">
+                  <p className="mb-5">{obj.title}</p>
+                  <b>{obj.price} руб.</b>
+                </div>
+                <img onClick={onRemoveItem} className="removeBtn" src="/img/btn-remove.svg" alt="Remove" />
+              </div>
+            ))
+          }
 
-            <div className="mr-20 flex">
-              <p className="mb-5">Мужские Кроссовки Nike Air Max 270</p>
-              <b>12 999 руб.</b>
-            </div>
-            <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove" />
-          </div>
-
-          <div className="cartItem d-flex align-center">
-            <div
-              style={{ backgroundImage: 'url(/img/sneakers/1.jpg)' }}
-              className="cartItemImg"></div>
-
-            <div className="mr-20 flex">
-              <p className="mb-5">Мужские Кроссовки Nike Air Max 270</p>
-              <b>12 999 руб.</b>
-            </div>
-            <img className="removeBtn" src="/img/btn-remove.svg" alt="Remove" />
-          </div>
+          {/* <CartItem
+                key={index}
+                img={obj.img}
+                title={obj.title}
+                price={obj.price}
+                onRemoveItem={handleRemoveItem}
+              /> */}
         </div>
 
         <div className="cartTotalBlock">
@@ -65,7 +61,7 @@ function CartMini({ onClose }) {
           </button>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

@@ -6,11 +6,12 @@ function Sneaker({ img, title, price, onFavorite, onPlus }) {
   const [isAdded, setIsAdded] = React.useState(false)
 
   const onClickPlus = () => {
+    onPlus({img, title, price})
     setIsAdded(!isAdded)
   }
 
   return (
-    <div className="card">
+    <div className="card mb-40">
       <img width={133} height={112} src={img} alt="Sneakers" />
       <h5>{title}</h5>
       <div className="d-flex justify-between align-center">
