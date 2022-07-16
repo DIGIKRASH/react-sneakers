@@ -1,57 +1,50 @@
-import axios from 'axios'
 import React from 'react'
 
-import { Sneaker, SneakerLoading } from '../components'
+import { Sneaker } from '../components'
 
 
-function Home() {
-  const [items, setItems] = React.useState([])
-  const [cartItems, setCartItems] = React.useState([])
+function Home({ items, searchValue, onAddToCart, clearSearchInput, onChangeSearchInput, onAddToFavorites, cartItems, isLoading }) {
 
-  React.useEffect(() => {
-    fetch('https://62d0089fd9bf9f170581f8bf.mockapi.io/items')
-      .then((res) => {
-        return res.json()
-      })
-      .then((json) => {
-        setItems(json)
-      })
-  }, [])
+  const renderItems = () => {
+    const filteredItems = items.filter((obj) => obj.title.toLowerCase().includes(searchValue.toLowerCase()))
 
-  const onAddToCart = (obj) => {
-    setCartItems([...cartItems, obj])
+    return (
+      isLoading
+        ? [...Array(10)]
+        : filteredItems.map((obj, index) => (
+          <Sneaker
+            key={`${obj.title}_${index}`}
+            img={obj.img}
+            title={obj.title}
+            price={obj.price}
+            onFavorite={(item) => onAddToFavorites(item)}
+            onPlus={(item) => onAddToCart(item)}
+            added={cartItems.some((item) => Number(item.id) === Number(obj.id))}
+            loading={isLoading}
+          />
+        ))
+    )
   }
-
 
   return (
     <div className="content p-40">
       <div className="d-flex align-center justify-between mb-40">
-        <h1 className="mb-40">Все кроссовки</h1>
+        <h1 className="mb-40">
+          {searchValue ? `Поиск по запросу: "${searchValue}"` : 'Все кроссовки'}
+        </h1>
 
         <div className="search-block d-flex">
           <img src="/img/search.svg" alt="Search" />
-          <input placeholder="Поиск..." />
+          {searchValue &&
+            <img onClick={clearSearchInput} className='clear cu-p' src="/img/btn-remove.svg" alt="Clear" />}
+          <input onChange={onChangeSearchInput} value={searchValue} placeholder="Поиск..." />
         </div>
       </div>
 
+
       <div className="d-flex flex-wrap">
 
-
-        {
-          items.map((obj, index) => (
-            <Sneaker
-              key={index}
-              img={obj.img}
-              title={obj.title}
-              price={obj.price}
-              onPlus={(obj) => onAddToCart(obj)}
-            />
-          ))
-        }
-
-        {/* <SneakerLoading
-
-        /> */}
+        {renderItems()}
 
       </div>
     </div>
