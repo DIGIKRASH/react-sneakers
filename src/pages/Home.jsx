@@ -2,8 +2,7 @@ import React from 'react'
 
 import { Sneaker } from '../components'
 
-
-function Home({ items, searchValue, onAddToCart, clearSearchInput, onChangeSearchInput, onAddToFavorites, cartItems, isLoading }) {
+function Home({ items, searchValue, onAddToCart, clearSearchInput, onChangeSearchInput, onAddToFavorites, isLoading }) {
 
   const renderItems = () => {
     const filteredItems = items.filter((obj) => obj.title.toLowerCase().includes(searchValue.toLowerCase()))
@@ -19,7 +18,6 @@ function Home({ items, searchValue, onAddToCart, clearSearchInput, onChangeSearc
             price={obj.price}
             onFavorite={(item) => onAddToFavorites(item)}
             onPlus={(item) => onAddToCart(item)}
-            added={cartItems.some((item) => Number(item.id) === Number(obj.id))}
             loading={isLoading}
           />
         ))

@@ -1,9 +1,11 @@
 import React from 'react'
 
-import { Sneaker } from '../components'
+import { Sneaker, Info } from '../components'
+import AppContext from '../context'
 
 
-function Favorites({ items, onAddToCart, onAddToFavorites }) {
+function Favorites({ onAddToCart, onAddToFavorites }) {
+  const { favorites } = React.useContext(AppContext)
 
   return (
     <div className="content p-40">
@@ -13,8 +15,8 @@ function Favorites({ items, onAddToCart, onAddToFavorites }) {
 
       <div className="d-flex flex-wrap">
 
-        {
-          items.map((obj,) => (
+        {favorites.length > 0
+          ? favorites.map((obj,) => (
             <Sneaker
               key={`${obj.title}_${obj.id}`}
               id={obj.id}
@@ -26,6 +28,11 @@ function Favorites({ items, onAddToCart, onAddToFavorites }) {
               onPlus={(item) => onAddToCart(item)}
             />
           ))
+          : <Info
+            img='./img/favorites-empty.svg'
+            title='Закладок нет :('
+            text='Вы ничего не добавляли в закладки'
+          />
         }
 
       </div>

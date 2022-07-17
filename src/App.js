@@ -4,9 +4,8 @@ import { Routes, Route } from 'react-router-dom'
 
 import { CartMini, Header } from './components';
 import { Home, Favorites } from './pages'
+import AppContext from './context'
 
-
-const AppContext = React.createContext({})
 
 function App() {
   const [cartOpen, setCartOpen] = React.useState(false)
@@ -82,9 +81,14 @@ function App() {
     setSearchValue('')
   }
 
+  const isItemAdded = (id) => {
+    return (
+      cartItems.some((obj) => Number(obj.id) === Number(id))
+    )
+  }
 
   return (
-    <AppContext.Provider value=({items, cartItems, favorites})>
+    <AppContext.Provider value={{ items, cartItems, favorites, setCartItems,  isItemAdded, setCartOpen }}>
       <div className="wrapper clear">
 
         {cartOpen &&
@@ -112,7 +116,6 @@ function App() {
           />
           <Route exact path='/favorites' element={
             <Favorites
-              items={favorites}
               onAddToFavorites={onAddToFavorites}
               onAddToCart={onAddToCart}
             />}

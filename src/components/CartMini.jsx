@@ -1,11 +1,24 @@
 import React from 'react'
+import axios from 'axios'
 
-import { CartItem } from '../components'
+import { CartItem, Info } from '../components'
+import AppContext from '../context'
 
 
 
 function CartMini({ onClose, items, onRemoveItem }) {
+  const { cartItems, setCartItems } = React.useContext(AppContext)
+  const [isOrder, setIsOrder] = React.useState(false)
+  const [orderId, setOrderId] = React.useState(null)
 
+
+  const onClickOrder = () => {
+    // axios.post('https://62d0089fd9bf9f170581f8bf.mockapi.io/orders', cartItems)
+    // setCartItems((prev) => [...prev, data])
+    setIsOrder(true)
+    setCartItems([])
+    console.log(isOrder);
+  }
 
   return (
     <div className="overlay">
@@ -18,7 +31,7 @@ function CartMini({ onClose, items, onRemoveItem }) {
         {
           items.length > 0 ?
             (
-              <div>
+              <>
                 <div className="items">
                   {
                     items &&
@@ -33,18 +46,6 @@ function CartMini({ onClose, items, onRemoveItem }) {
                       />
                     ))
                   }
-
-                  {/* <div key={`${obj.title}_${index}`} className="cartItem d-flex align-center mb-20" >
-                        <div
-                          style={{ backgroundImage: `url(${obj.img})` }}
-                          className="cartItemImg"></div>
-
-                        <div className="mr-20 flex">
-                          <p className="mb-5">{obj.title}</p>
-                          <b>{obj.price} руб.</b>
-                        </div>
-                        <img onClick={() => onRemoveItem(obj.id)} className="removeBtn" src="/img/btn-remove.svg" alt="Remove" />
-                      </div> */}
                 </div>
 
                 <div className="cartTotalBlock">
@@ -60,24 +61,20 @@ function CartMini({ onClose, items, onRemoveItem }) {
                       <b>1074 руб. </b>
                     </li>
                   </ul>
-                  <button className="greenButton">
+                  <button onClick={onClickOrder} className="greenButton">
                     Оформить заказ <img src="/img/arrow.svg" alt="Arrow" />
                   </button>
                 </div>
-              </div>
+              </>
             )
 
 
             : (
-              <div class="cartEmpty d-flex align-center justify-center flex-column flex">
-                <img class="mb-20" width="120px" height="120px" src="/img/empty-cart.jpg" alt="Empty" />
-                <h2>Корзина пустая</h2>
-                <p class="opacity-6">Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.</p>
-                <button onClick={onClose} class="greenButton">
-                  <img onClick={onClose} src="/img/arrow.svg" alt="Arrow" />
-                  Вернуться назад
-                </button>
-              </div>
+              <Info
+                img={isOrder ? './img/complete-order.jpg' : './img/empty-cart.jpg'}
+                title={isOrder ? 'Заказ оформлен!' : 'Корзина пустая'}
+                text={isOrder ? `Ваш заказ #${orderId} скоро будет передан курьерской доставке` : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'}
+              />
             )
         }
 

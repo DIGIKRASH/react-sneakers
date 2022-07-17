@@ -2,15 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import SneakerLoading from './SneakerLoading'
+import AppContext from '../../context'
 
-function Sneaker({ id, img, title, price, onPlus, onFavorite, favorited = false, added = false, loading }) {
-  const [isAdded, setIsAdded] = React.useState(added)
+function Sneaker({ id, img, title, price, onPlus, onFavorite, favorited = false, loading = false }) {
+  const { isItemAdded } = React.useContext(AppContext)
+
   const [isFavorite, setIsFavorite] = React.useState(favorited)
 
 
   const onClickPlus = () => {
     onPlus({ id, img, title, price })
-    setIsAdded(!isAdded)
   }
 
   const handleFavorite = () => {
@@ -18,7 +19,7 @@ function Sneaker({ id, img, title, price, onPlus, onFavorite, favorited = false,
     setIsFavorite(!isFavorite)
   }
 
-
+ 
   return (
     <div className="card mb-40">
       {
@@ -36,7 +37,7 @@ function Sneaker({ id, img, title, price, onPlus, onFavorite, favorited = false,
                 <b>{price} руб.</b>
               </div>
               <button className="button" onClick={onClickPlus}>
-                <img width={11} height={11} src={isAdded ? './img/btn-checked.svg' : './img/btn-plus.svg'} alt="Plus" />
+                <img width={11} height={11} src={isItemAdded(id) ? './img/btn-checked.svg' : './img/btn-plus.svg'} alt="Plus" />
               </button>
             </div>
           </>
